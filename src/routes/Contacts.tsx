@@ -4,6 +4,7 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 
 import NavBar from "../components/NavBar";
+import AddContactForm from "../components/AddContactForm";
 
 function Contacts() {
   return (
@@ -11,7 +12,9 @@ function Contacts() {
       <NavBar></NavBar>
       <CssBaseline />
       <Container maxWidth="xl" disableGutters={true}>
-        <Box sx={{ bgcolor: "#262626", height: "100vh" }} />
+        <Box sx={{ bgcolor: "#262626", height: "100vh" }}>
+          <AddContactForm></AddContactForm>
+        </Box>
       </Container>
     </React.Fragment>
   );
