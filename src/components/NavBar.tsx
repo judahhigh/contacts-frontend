@@ -15,12 +15,32 @@ function NavBar() {
       <AppBar position="static" sx={{ bgcolor: "#1c1c1c" }}>
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            <Link to="/">Home</Link>
+            <Link
+              to="/"
+              style={{
+                textDecoration: "none",
+                color: "#ffffff",
+                textTransform: "uppercase",
+              }}
+            >
+              Home
+            </Link>
           </Typography>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            <Link to="/contacts">Contacts</Link>
+            <Link
+              to="/contacts"
+              style={{
+                textDecoration: "none",
+                color: "#ffffff",
+                textTransform: "uppercase",
+              }}
+            >
+              Contacts
+            </Link>
           </Typography>
-          <Button color="inherit">Login</Button>
+          <Button color="primary" variant="contained">
+            Login
+          </Button>
         </Toolbar>
       </AppBar>
     </Box>

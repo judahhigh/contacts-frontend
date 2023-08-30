@@ -1,9 +1,19 @@
 import * as React from "react";
 import { useState, ChangeEvent } from "react";
-import { FormControl, InputLabel, Input, CardContent } from "@mui/material";
+import {
+  FormControl,
+  InputLabel,
+  Input,
+  CardContent,
+  TextField,
+} from "@mui/material";
 import Card from "@mui/material/Card";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
+import Divider from "@mui/material/Divider";
+import { Link } from "react-router-dom";
+import Paper from "@mui/material/Paper";
+import Box from "@mui/material/Box";
 
 import Contact from "../entities";
 import initContact from "../entities";
@@ -38,63 +48,75 @@ function AddContactForm() {
     }
   }
 
-  function handleAddContact() {
+  function handleAddContact(e: any) {
+    e.preventDefault();
     persistContact(contact);
   }
 
   return (
-    <Card>
-      <CardContent>
-        <Stack spacing={2}>
-          <FormControl>
-            <InputLabel htmlFor="first-name">First name</InputLabel>
-            <Input
-              id="first-name"
-              type="text"
-              aria-describedby="provide-a-first-name"
-              onChange={handleContactChange}
-            />
-          </FormControl>
-          <FormControl>
-            <InputLabel htmlFor="last-name">Last name</InputLabel>
-            <Input
-              id="last-name"
-              type="text"
-              aria-describedby="provide-a-last-name"
-              onChange={handleContactChange}
-            />
-          </FormControl>
-          <FormControl>
-            <InputLabel htmlFor="email">Email</InputLabel>
-            <Input
-              id="email"
-              type="email"
-              aria-describedby="provide-an-email"
-              onChange={handleContactChange}
-            />
-          </FormControl>
-          <FormControl>
-            <InputLabel htmlFor="phone-number">Phone number</InputLabel>
-            <Input
-              id="phone-number"
-              type="tel"
-              aria-describedby="provide-a-phone-number"
-              onChange={handleContactChange}
-            />
-          </FormControl>
-          <Button variant="contained" onClick={handleAddContact}>
-            Add Contact
-          </Button>
-          <div>
-            <p>{contact.id}</p>
-            <p>{contact.firstName}</p>
-            <p>{contact.lastName}</p>
-            <p>{contact.email}</p>
-            <p>{contact.tel}</p>
-          </div>
-        </Stack>
-      </CardContent>
-    </Card>
+    <Box sx={{ p: 2 }}>
+      <Paper
+        sx={{ p: 2, borderRadius: 2, bgcolor: "#edfbfc", maxWidth: "600px" }}
+        elevation={3}
+      >
+        <form onSubmit={handleAddContact}>
+          <Stack spacing={3}>
+            <h2>Add a new contact to your rolodex.</h2>
+            <Stack
+              direction="row"
+              spacing={3}
+              divider={<Divider orientation="vertical" flexItem />}
+            >
+              <TextField
+                id="first-name"
+                type="text"
+                margin="normal"
+                fullWidth
+                variant="filled"
+                label="First name"
+                onChange={handleContactChange}
+              />
+              <TextField
+                id="last-name"
+                type="text"
+                margin="normal"
+                fullWidth
+                variant="filled"
+                label="Last name"
+                onChange={handleContactChange}
+              />
+            </Stack>
+            <Stack
+              direction="row"
+              spacing={3}
+              divider={<Divider orientation="vertical" flexItem />}
+            >
+              <TextField
+                id="email"
+                type="email"
+                margin="normal"
+                fullWidth
+                variant="filled"
+                label="Email"
+                onChange={handleContactChange}
+              />
+              <TextField
+                id="tel"
+                type="text"
+                margin="normal"
+                fullWidth
+                variant="filled"
+                label="Phone number"
+                onChange={handleContactChange}
+              />
+            </Stack>
+            <Button variant="contained" type="submit">
+              Add Contact
+            </Button>
+          </Stack>
+        </form>
+      </Paper>
+    </Box>
   );
 }
 

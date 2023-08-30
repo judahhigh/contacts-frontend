@@ -12,7 +12,14 @@ function Contacts() {
       <NavBar></NavBar>
       <CssBaseline />
       <Container maxWidth="xl" disableGutters={true}>
-        <Box sx={{ bgcolor: "#262626", height: "100vh" }}>
+        <Box
+          sx={{
+            bgcolor: "#262626",
+            height: "100vh",
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
           <AddContactForm></AddContactForm>
         </Box>
       </Container>
