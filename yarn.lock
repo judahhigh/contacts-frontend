@@ -8982,6 +8982,11 @@ tapable@^2.0.0, tapable@^2.1.1, tapable@^2.2.0:
   resolved "https://registry.yarnpkg.com/tapable/-/tapable-2.2.1.tgz#1967a73ef4060a82f12ab96af86d52fdb76eeca0"
   integrity sha512-GNzQvQTOIP6RyTfE2Qxb8ZVlNmw0n88vp1szwWRimP02mnTsx3Wtn5qRdqY9w2XduFNUgvOwhNnQsjwCp+kqaQ==
 
+teaful@^0.11.1:
+  version "0.11.1"
+  resolved "https://registry.yarnpkg.com/teaful/-/teaful-0.11.1.tgz#9e176a8358b261d2a8a582bae24a605a718171c7"
+  integrity sha512-U1O0u+GsHI0b/6vcEDjSPYwAWX57WAOXG31KCzAMrV4rWqcy+j71F4jsHb5q9FYqdkQjH8Pi1fWJ1oO/dLAKdw==
+
 temp-dir@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/temp-dir/-/temp-dir-2.0.0.tgz#bde92b05bdfeb1516e804c9c00ad45177f31321e"
