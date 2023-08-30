@@ -5,9 +5,9 @@ import Card from "@mui/material/Card";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 
-import Contact from "../entities/contacts";
-import initContact from "../entities/contacts";
-import persistContact from "../api/contacts";
+import Contact from "../entities";
+import initContact from "../entities";
+import persistContact from "../api/contacts-apis";
 
 function AddContactForm() {
   const [contact, setContact] = useState(initContact());
@@ -16,39 +16,26 @@ function AddContactForm() {
     console.log(e.target.value);
     let id: string = e.target.id;
     if (id === "first-name") {
-      setContact({
-        id: contact.id,
+      setContact((contact) => ({
+        ...contact,
         firstName: e.target.value,
-        lastName: contact.lastName,
-        email: contact.email,
-        tel: contact.tel,
-      });
+      }));
     } else if (id === "last-name") {
-      setContact({
-        id: contact.id,
-        firstName: contact.firstName,
+      setContact((contact) => ({
+        ...contact,
         lastName: e.target.value,
-        email: contact.email,
-        tel: contact.tel,
-      });
+      }));
     } else if (id === "email") {
-      setContact({
-        id: contact.id,
-        firstName: contact.firstName,
-        lastName: contact.lastName,
+      setContact((contact) => ({
+        ...contact,
         email: e.target.value,
-        tel: contact.tel,
-      });
+      }));
     } else if (id === "phone-number") {
-      setContact({
-        id: contact.id,
-        firstName: contact.firstName,
-        lastName: contact.lastName,
-        email: contact.email,
+      setContact((contact) => ({
+        ...contact,
         tel: e.target.value,
-      });
+      }));
     }
-    console.log(contact);
   }
 
   function handleAddContact() {
@@ -98,6 +85,13 @@ function AddContactForm() {
           <Button variant="contained" onClick={handleAddContact}>
             Add Contact
           </Button>
+          <div>
+            <p>{contact.id}</p>
+            <p>{contact.firstName}</p>
+            <p>{contact.lastName}</p>
+            <p>{contact.email}</p>
+            <p>{contact.tel}</p>
+          </div>
         </Stack>
       </CardContent>
     </Card>

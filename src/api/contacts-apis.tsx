@@ -1,4 +1,4 @@
-import { Contact } from "../entities/contacts";
+import { Contact } from "../entities";
 
 export default function persistContact(contact: Contact): boolean {
   // TODO: Implement processing and persistence of contact through api call to backend
