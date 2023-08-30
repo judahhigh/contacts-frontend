@@ -1,5 +1,10 @@
 import createStore from "teaful";
+import { Contact } from "./entities";
 
-export const { useStore } = createStore({
+interface InitStore {
+  contacts: Contact[];
+}
+
+export const { useStore } = createStore<InitStore>({
   contacts: [],
 });

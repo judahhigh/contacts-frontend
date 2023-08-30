@@ -7,6 +7,8 @@ import Button from "@mui/material/Button";
 
 import NavBar from "../components/NavBar";
 import AddContactFormDialog from "../components/AddContactFormDialog";
+import ContactCards from "../components/ContactCards";
+import RefreshIcon from "@mui/icons-material/Refresh";
 
 function Contacts() {
   return (
@@ -22,8 +24,17 @@ function Contacts() {
             justifyContent: "center",
           }}
         >
-          <Stack spacing={3} sx={{ p: 2, maxWidth: "600px" }}>
-            <AddContactFormDialog></AddContactFormDialog>
+          <Stack
+            spacing={3}
+            sx={{ p: 2, maxWidth: "600px", alignItems: "center" }}
+          >
+            <Stack direction="row" spacing={1}>
+              <AddContactFormDialog></AddContactFormDialog>
+              <Button variant="contained" startIcon={<RefreshIcon />}>
+                Refresh
+              </Button>
+            </Stack>
+            <ContactCards />
           </Stack>
         </Box>
       </Container>

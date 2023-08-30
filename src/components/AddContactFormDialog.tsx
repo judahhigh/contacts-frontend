@@ -12,7 +12,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 
 import initContact from "../entities";
-import persistContact from "../api/contacts-apis";
+import { persistContact } from "../api/contacts-apis";
 
 function AddContactFormDialog() {
   const [contact, setContact] = useState(initContact());
