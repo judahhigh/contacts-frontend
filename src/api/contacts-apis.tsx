@@ -18,6 +18,20 @@ export function fetchContacts(): Contact[] {
       email: "fake@fake.com",
       tel: "1231231234",
     },
+    {
+      id: "234",
+      firstName: "jim",
+      lastName: "bob",
+      email: "fake2@fake2.com",
+      tel: "123498771234",
+    },
+    {
+      id: "654",
+      firstName: "kim",
+      lastName: "bob",
+      email: "fake3@fake2.com",
+      tel: "33333333",
+    },
   ];
   return contacts;
 }

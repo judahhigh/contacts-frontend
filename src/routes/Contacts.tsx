@@ -14,7 +14,6 @@ function Contacts() {
   return (
     <React.Fragment>
       <NavBar></NavBar>
-      <CssBaseline />
       <Container maxWidth="xl" disableGutters={true}>
         <Box
           sx={{
