@@ -1,21 +1,12 @@
 import * as React from "react";
 import { useState, ChangeEvent } from "react";
-import {
-  FormControl,
-  InputLabel,
-  Input,
-  CardContent,
-  TextField,
-} from "@mui/material";
-import Card from "@mui/material/Card";
+import { TextField } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
-import { Link } from "react-router-dom";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 
-import Contact from "../entities";
 import initContact from "../entities";
 import persistContact from "../api/contacts-apis";
 
