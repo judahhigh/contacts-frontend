@@ -1,10 +1,7 @@
-import createStore from "teaful";
 import { Contact } from "./entities";
+import { atom } from "recoil";
 
-interface InitStore {
-  contacts: Contact[];
-}
-
-export const { useStore } = createStore<InitStore>({
-  contacts: [],
+export const contactsState = atom<Contact[]>({
+  key: "contactsState",
+  default: [],
 });

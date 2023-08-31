@@ -1,41 +1,32 @@
-import { Card } from "@mui/material";
-import CardContent from "@mui/material";
 import { Typography } from "@mui/material";
-import { ButtonBase, CardActionArea, CardActions } from "@mui/material";
-import { Contact } from "../entities";
-import { fetchContacts } from "../api/contacts-apis";
 import { useEffect } from "react";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button/Button";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Stack from "@mui/material/Stack";
 import UpdateIcon from "@mui/icons-material/Update";
-import { useStore } from "../stores";
+import { useRecoilState } from "recoil";
+
+import { contactsState } from "../stores";
+import { Contact } from "../entities";
+import { fetchContacts } from "../api/contacts-apis";
 
 function ContactCards() {
-  const [store, setStore] = useStore();
+  const [contacts, setContacts] = useRecoilState(contactsState);
 
   const fetch = () => {
     const updatedContacts: Contact[] = fetchContacts();
-    console.log(updatedContacts);
-    if (store) {
-      setStore((s) => ({
-        ...s,
-        contacts: updatedContacts,
-      }));
-    }
-
-    // setContacts();
+    setContacts(updatedContacts);
   };
 
   useEffect(() => {
     fetch();
   }, []);
 
-  if (store && store.contacts && store.contacts.length > 0) {
+  if (contacts && contacts.length > 0) {
     return (
       <>
-        {store.contacts.map((contact: Contact) => (
+        {contacts.map((contact: Contact) => (
           <Paper
             elevation={24}
             key={contact.id}
