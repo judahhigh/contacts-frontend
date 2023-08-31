@@ -4,14 +4,15 @@ import { TextField } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
-
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useRecoilState } from "recoil";
 
 import { deleteContact } from "../api/contacts-apis";
+import { contactsState } from "../stores";
 
 type DeleteContactProps = {
   id?: string;
@@ -28,13 +29,14 @@ function DeleteContactFormDialog({
   email,
   tel,
 }: DeleteContactProps) {
-  const [contact] = useState({
+  const [contactToDelete] = useState({
     id: id,
     firstName: firstName,
     lastName: lastName,
     email: email,
     tel: tel,
   });
+  const [contacts, setContacts] = useRecoilState(contactsState);
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -47,7 +49,10 @@ function DeleteContactFormDialog({
 
   function handleDeleteContact(e: any) {
     e.preventDefault();
-    deleteContact(contact);
+    deleteContact(contactToDelete);
+    setContacts((contacts) =>
+      contacts.filter((contact) => contact.id !== contactToDelete.id)
+    );
     handleClose();
   }
 

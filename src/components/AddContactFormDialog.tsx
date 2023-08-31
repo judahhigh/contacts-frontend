@@ -7,16 +7,18 @@ import Divider from "@mui/material/Divider";
 
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
-import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
+import { useRecoilState } from "recoil";
 
 import initContact from "../entities";
 import { persistContact } from "../api/contacts-apis";
+import { contactsState } from "../stores";
 
 function AddContactFormDialog() {
-  const [contact, setContact] = useState(initContact());
+  const [contactToAdd, setContact] = useState(initContact());
   const [open, setOpen] = React.useState(false);
+  const [contacts, setContacts] = useRecoilState(contactsState);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -54,7 +56,8 @@ function AddContactFormDialog() {
 
   function handleAddContact(e: any) {
     e.preventDefault();
-    persistContact(contact);
+    persistContact(contactToAdd);
+    setContacts([...contacts, contactToAdd]);
     handleClose();
   }
 

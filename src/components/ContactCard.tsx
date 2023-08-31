@@ -1,7 +1,5 @@
 import { Typography } from "@mui/material";
 import Paper from "@mui/material/Paper";
-import Button from "@mui/material/Button/Button";
-import DeleteIcon from "@mui/icons-material/Delete";
 import Stack from "@mui/material/Stack";
 
 import UpdateContactFormDialog from "./UpdateContactFormDialog";

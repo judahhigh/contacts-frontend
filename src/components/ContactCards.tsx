@@ -1,24 +1,22 @@
-import { Typography } from "@mui/material";
 import { useEffect } from "react";
-import Paper from "@mui/material/Paper";
-import Button from "@mui/material/Button/Button";
-import DeleteIcon from "@mui/icons-material/Delete";
-import Stack from "@mui/material/Stack";
-import UpdateIcon from "@mui/icons-material/Update";
 import { useRecoilState } from "recoil";
+import { Ok, Err, Result } from "ts-results";
 
 import { contactsState } from "../stores";
 import { Contact } from "../entities";
 import { fetchContacts } from "../api/contacts-apis";
-import UpdateContactFormDialog from "./UpdateContactFormDialog";
 import ContactCard from "./ContactCard";
+import { Error } from "../api/contacts-apis";
 
 function ContactCards() {
   const [contacts, setContacts] = useRecoilState(contactsState);
 
   const fetch = () => {
-    const updatedContacts: Contact[] = fetchContacts();
-    setContacts(updatedContacts);
+    const result: Result<Contact[], Error> = fetchContacts();
+    if (result.ok) {
+      const updatedContacts = result.unwrap();
+      setContacts(updatedContacts);
+    }
   };
 
   useEffect(() => {

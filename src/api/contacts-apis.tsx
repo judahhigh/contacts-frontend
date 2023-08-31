@@ -1,15 +1,24 @@
 import { Contact } from "../entities";
+import { Ok, Err, Result } from "ts-results";
 
-export function persistContact(contact: Contact): boolean {
+export enum Error {
+  PersistFailure,
+  FetchFailure,
+  DeleteFailure,
+  UpdateFailure,
+  RefreshFailure,
+}
+
+export function persistContact(contact: Contact): Result<Contact, Error> {
   // TODO: Implement processing and persistence of contact through api call to backend
   // The backend will
   // 1. check if the contact already exists based on supplied information
   // 2. if the contact is unique, it will attempt to persist it, otherwise it will fail
   console.log(contact);
-  return false;
+  return Ok(contact);
 }
 
-export function fetchContacts(): Contact[] {
+export function fetchContacts(): Result<Contact[], Error> {
   let contacts: Contact[] = [
     {
       id: "123",
@@ -33,13 +42,17 @@ export function fetchContacts(): Contact[] {
       tel: "33333333",
     },
   ];
-  return contacts;
+  return Ok(contacts);
 }
 
-export function updateContact(contact: Contact): Contact {
-  return contact;
+export function updateContact(contact: Contact): Result<Contact, Error> {
+  return Ok(contact);
 }
 
-export function deleteContact(contact: Contact): Contact {
-  return contact;
+export function deleteContact(contact: Contact): Result<Contact, Error> {
+  return Ok(contact);
+}
+
+export function refreshContacts(contacts: Contact[]): Result<Contact[], Error> {
+  return Ok(contacts);
 }
