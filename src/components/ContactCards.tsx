@@ -10,6 +10,7 @@ import { useRecoilState } from "recoil";
 import { contactsState } from "../stores";
 import { Contact } from "../entities";
 import { fetchContacts } from "../api/contacts-apis";
+import UpdateContactFormDialog from "./UpdateContactFormDialog";
 
 function ContactCards() {
   const [contacts, setContacts] = useRecoilState(contactsState);
@@ -46,13 +47,13 @@ function ContactCards() {
               {contact.tel ? contact.tel : "No phone number"}
             </Typography>
             <Stack direction="row" spacing={2}>
-              <Button
-                variant="contained"
-                startIcon={<UpdateIcon />}
-                size="small"
-              >
-                Update
-              </Button>
+              <UpdateContactFormDialog
+                id={contact.id}
+                firstName={contact.firstName}
+                lastName={contact.lastName}
+                email={contact.email}
+                tel={contact.tel}
+              />
               <Button
                 variant="contained"
                 color="error"

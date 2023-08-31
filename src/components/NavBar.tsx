@@ -6,9 +6,6 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
-import Stack from "@mui/material/Stack";
 
 import logo from "../logo.png";
 
@@ -25,7 +22,7 @@ function NavBar() {
               alt="logo"
             />
           </Box>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <Typography variant="h6" component="div" sx={{ mr: 2, flexGrow: 1 }}>
             <Link
               to="/"
               style={{
@@ -37,7 +34,7 @@ function NavBar() {
               Home
             </Link>
           </Typography>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <Typography variant="h6" component="div" sx={{ mr: 2 }}>
             <Link
               to="/contacts"
               style={{

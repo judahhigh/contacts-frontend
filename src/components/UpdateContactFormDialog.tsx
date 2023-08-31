@@ -7,15 +7,34 @@ import Divider from "@mui/material/Divider";
 
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
-import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
+import UpdateIcon from "@mui/icons-material/Update";
 
-import initContact from "../entities";
-import { persistContact } from "../api/contacts-apis";
+import { updateContact } from "../api/contacts-apis";
 
-function AddContactFormDialog() {
-  const [contact, setContact] = useState(initContact());
+type UpdateContactProps = {
+  id?: string;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  tel?: string;
+};
+
+function UpdateContactFormDialog({
+  id,
+  firstName,
+  lastName,
+  email,
+  tel,
+}: UpdateContactProps) {
+  const [contact, setContact] = useState({
+    id: id,
+    firstName: firstName,
+    lastName: lastName,
+    email: email,
+    tel: tel,
+  });
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -52,25 +71,29 @@ function AddContactFormDialog() {
     }
   }
 
-  function handleAddContact(e: any) {
+  function handleUpdateContact(e: any) {
     e.preventDefault();
-    persistContact(contact);
+    updateContact(contact);
     handleClose();
   }
 
   return (
     <div>
-      <Button variant="contained" onClick={handleClickOpen}>
-        Add contact
+      <Button
+        variant="contained"
+        onClick={handleClickOpen}
+        startIcon={<UpdateIcon />}
+      >
+        Update
       </Button>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Add a New Contact</DialogTitle>
+        <DialogTitle>Update an existing Contact</DialogTitle>
         <DialogContent>
           <DialogContentText sx={{ mb: 2 }}>
-            To add a new contact to your rolodex, enter in their name, email,
-            and telephone number.
+            To update this contact in your rolodex, update any of the fields
+            shown.
           </DialogContentText>
-          <form onSubmit={handleAddContact}>
+          <form onSubmit={handleUpdateContact}>
             <Stack spacing={3}>
               <Stack
                 direction="row"
@@ -85,6 +108,7 @@ function AddContactFormDialog() {
                   variant="standard"
                   label="First name"
                   size="small"
+                  value={firstName ? firstName : ""}
                   onChange={handleContactChange}
                 />
                 <TextField
@@ -95,6 +119,7 @@ function AddContactFormDialog() {
                   variant="standard"
                   label="Last name"
                   size="small"
+                  value={lastName ? lastName : ""}
                   onChange={handleContactChange}
                 />
               </Stack>
@@ -111,6 +136,7 @@ function AddContactFormDialog() {
                   variant="standard"
                   label="Email"
                   size="small"
+                  value={email ? email : ""}
                   onChange={handleContactChange}
                 />
                 <TextField
@@ -121,6 +147,7 @@ function AddContactFormDialog() {
                   variant="standard"
                   label="Phone number"
                   size="small"
+                  value={tel ? tel : ""}
                   onChange={handleContactChange}
                 />
               </Stack>
@@ -130,7 +157,7 @@ function AddContactFormDialog() {
                 spacing={3}
               >
                 <Button variant="contained" type="submit">
-                  Add Contact
+                  Update Contact
                 </Button>
                 <Button variant="contained" onClick={handleClose}>
                   Cancel
@@ -144,4 +171,4 @@ function AddContactFormDialog() {
   );
 }
 
-export default AddContactFormDialog;
+export default UpdateContactFormDialog;

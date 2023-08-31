@@ -35,3 +35,7 @@ export function fetchContacts(): Contact[] {
   ];
   return contacts;
 }
+
+export function updateContact(contact: Contact): Contact {
+  return contact;
+}
