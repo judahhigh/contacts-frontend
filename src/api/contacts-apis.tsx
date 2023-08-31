@@ -39,3 +39,7 @@ export function fetchContacts(): Contact[] {
 export function updateContact(contact: Contact): Contact {
   return contact;
 }
+
+export function deleteContact(contact: Contact): Contact {
+  return contact;
+}

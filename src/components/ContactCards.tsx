@@ -11,6 +11,7 @@ import { contactsState } from "../stores";
 import { Contact } from "../entities";
 import { fetchContacts } from "../api/contacts-apis";
 import UpdateContactFormDialog from "./UpdateContactFormDialog";
+import ContactCard from "./ContactCard";
 
 function ContactCards() {
   const [contacts, setContacts] = useRecoilState(contactsState);
@@ -28,42 +29,14 @@ function ContactCards() {
     return (
       <>
         {contacts.map((contact: Contact) => (
-          <Paper
-            elevation={24}
+          <ContactCard
             key={contact.id}
-            sx={{ p: 4, bgcolor: "#fff6de" }}
-          >
-            <Typography gutterBottom variant="body1" component="div">
-              <strong>Name:</strong>{" "}
-              {contact.firstName ? contact.firstName.concat(" ") : "No name"}
-              {contact.lastName ? contact.lastName : ""}
-            </Typography>
-            <Typography gutterBottom variant="body1" component="div">
-              <strong>Email:</strong>{" "}
-              {contact.email ? contact.email : "No email"}
-            </Typography>
-            <Typography gutterBottom variant="body1" component="div">
-              <strong>Phone:</strong>{" "}
-              {contact.tel ? contact.tel : "No phone number"}
-            </Typography>
-            <Stack direction="row" spacing={2}>
-              <UpdateContactFormDialog
-                id={contact.id}
-                firstName={contact.firstName}
-                lastName={contact.lastName}
-                email={contact.email}
-                tel={contact.tel}
-              />
-              <Button
-                variant="contained"
-                color="error"
-                startIcon={<DeleteIcon />}
-                size="small"
-              >
-                Delete
-              </Button>
-            </Stack>
-          </Paper>
+            id={contact.id}
+            firstName={contact.firstName}
+            lastName={contact.lastName}
+            email={contact.email}
+            tel={contact.tel}
+          />
         ))}
       </>
     );
