@@ -14,7 +14,7 @@ function Contacts() {
   return (
     <React.Fragment>
       <NavBar></NavBar>
-      <Container maxWidth="xl" disableGutters={true}>
+      <Container maxWidth={false} disableGutters={true}>
         <Box
           sx={{
             bgcolor: "#262626",

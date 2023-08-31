@@ -13,11 +13,12 @@ function Home() {
     <React.Fragment>
       <NavBar></NavBar>
       <CssBaseline />
-      <Container maxWidth="xl" disableGutters={true}>
+      <Container maxWidth={false} disableGutters={true}>
         <Box
           sx={{
             bgcolor: "#262626",
             height: "100vh",
+            width: "100%",
           }}
         >
           <Stack
