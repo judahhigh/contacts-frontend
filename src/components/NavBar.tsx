@@ -8,12 +8,23 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
+import Stack from "@mui/material/Stack";
+
+import logo from "../logo.png";
 
 function NavBar() {
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ display: "flex", justifyContent: "space-evenly" }}>
       <AppBar position="static" sx={{ bgcolor: "#1c1c1c" }}>
         <Toolbar>
+          <Box sx={{ mr: 1, mt: 0.5 }}>
+            <img
+              src={logo}
+              style={{ maxWidth: "20px" }}
+              className="App-logo"
+              alt="logo"
+            />
+          </Box>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             <Link
               to="/"
