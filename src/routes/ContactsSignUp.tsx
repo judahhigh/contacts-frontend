@@ -43,7 +43,7 @@ function ContactsSignUp() {
       const [fetched_user, fetched_token] = result.unwrap();
       console.log(fetched_token);
       console.log(fetched_user);
-      setToken(fetched_token.token);
+      setToken(Some(fetched_token));
       setUser(Some(fetched_user));
       navigate("/contacts");
     }

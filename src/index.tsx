@@ -10,8 +10,6 @@ import ContactsLogin from "./routes/ContactsLogin";
 import ContactsSignUp from "./routes/ContactsSignUp";
 import { RecoilRoot } from "recoil";
 
-import { ChakraProvider } from "@chakra-ui/react";
-
 const router = createBrowserRouter([
   {
     path: "/",
