@@ -1,15 +1,28 @@
-import React from "react";
-import NavBar from "../components/NavBar";
-import Stack from "@mui/material/Stack";
-import Divider from "@mui/material/Divider";
-import { Box, Container, TextField } from "@mui/material";
 import Button from "@mui/material/Button";
-import { useState, ChangeEvent } from "react";
+import CloseIcon from "@mui/icons-material/Close";
+import Divider from "@mui/material/Divider";
+import IconButton from "@mui/material/IconButton";
+import NavBar from "../components/NavBar";
+import React, { ChangeEvent, useState } from "react";
+import Snackbar from "@mui/material/Snackbar";
+import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
+import { Box, Container, TextField } from "@mui/material";
+import { register } from "../api/contacts-apis";
+import { Some } from "ts-results";
+import { tokenState, userState } from "../stores";
+import { useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
 
 function ContactsSignUp() {
   const [username, setUsername] = React.useState("");
+  const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const navigate = useNavigate();
+  const [open, setOpen] = React.useState(false);
+
+  const [token, setToken] = useRecoilState(tokenState);
+  const [user, setUser] = useRecoilState(userState);
 
   function handleUsernameChange(e: ChangeEvent<HTMLInputElement>) {
     setUsername(e.target.value);
@@ -19,10 +32,50 @@ function ContactsSignUp() {
     setPassword(e.target.value);
   }
 
-  function handleLogin(e: any) {
-    e.preventDefault();
+  function handleEmailChange(e: ChangeEvent<HTMLInputElement>) {
+    setEmail(e.target.value);
   }
 
+  async function handleLogin(e: any) {
+    e.preventDefault();
+    const result = await register(username, email, password);
+    if (result.ok) {
+      const [fetched_user, fetched_token] = result.unwrap();
+      console.log(fetched_token);
+      console.log(fetched_user);
+      setToken(fetched_token.token);
+      setUser(Some(fetched_user));
+      navigate("/contacts");
+    }
+  }
+
+  const handleLoginFailure = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (
+    event: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+  const failedLoginAction = (
+    <React.Fragment>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleClose}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </React.Fragment>
+  );
 
   return (
     <React.Fragment>
@@ -63,14 +116,14 @@ function ContactsSignUp() {
                   onChange={handleUsernameChange}
                 />
                 <TextField
-                  id="username"
+                  id="email"
                   type="email"
                   margin="normal"
                   fullWidth
                   variant="standard"
                   label="Email"
                   size="small"
-                  onChange={handleUsernameChange}
+                  onChange={handleEmailChange}
                 />
                 <TextField
                   id="password"
@@ -94,6 +147,13 @@ function ContactsSignUp() {
           </Stack>
         </Box>
       </Container>
+      <Snackbar
+        open={open}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        message="Failed to sign up, try again."
+        action={failedLoginAction}
+      />
     </React.Fragment>
   );
 }

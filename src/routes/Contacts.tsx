@@ -11,13 +11,18 @@ import NavBar from "../components/NavBar";
 import AddContactFormDialog from "../components/AddContactFormDialog";
 import ContactCards from "../components/ContactCards";
 import RefreshIcon from "@mui/icons-material/Refresh";
-import { contactsState } from "../stores";
+import { contactsState, userState, tokenState } from "../stores";
 import { Error } from "../api/contacts-apis";
 import { Contact } from "../entities";
 import { refreshContacts } from "../api/contacts-apis";
 
 function Contacts() {
   const [contacts, setContacts] = useRecoilState(contactsState);
+  const [user, setUser] = useRecoilState(userState);
+  const [token, setToken] = useRecoilState(tokenState);
+
+  console.log("Token: ", token);
+  console.log("User: ", user);
 
   function handleRefresh() {
     const result: Result<Contact[], Error> = refreshContacts(contacts);
