@@ -47,7 +47,16 @@ function NavBar() {
             </Link>
           </Typography>
           <Button color="primary" variant="contained">
-            Login
+            <Link
+              to="/login"
+              style={{
+                textDecoration: "none",
+                color: "#ffffff",
+                textTransform: "uppercase",
+              }}
+            >
+              Login
+            </Link>
           </Button>
         </Toolbar>
       </AppBar>

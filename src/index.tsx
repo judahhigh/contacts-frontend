@@ -6,6 +6,8 @@ import reportWebVitals from "./reportWebVitals";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./routes/Home";
 import Contacts from "./routes/Contacts";
+import ContactsLogin from "./routes/ContactsLogin";
+import ContactsSignUp from "./routes/ContactsSignUp";
 import { RecoilRoot } from "recoil";
 
 const router = createBrowserRouter([
@@ -16,6 +18,14 @@ const router = createBrowserRouter([
   {
     path: "/contacts",
     element: <Contacts />,
+  },
+  {
+    path: "/login",
+    element: <ContactsLogin />,
+  },
+  {
+    path: "/signup",
+    element: <ContactsSignUp />,
   },
 ]);
 
