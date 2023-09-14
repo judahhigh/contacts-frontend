@@ -1,19 +1,18 @@
-import * as React from "react";
-import { useState } from "react";
-import { TextField } from "@mui/material";
-import Stack from "@mui/material/Stack";
-import Button from "@mui/material/Button";
-import Divider from "@mui/material/Divider";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { useRecoilState } from "recoil";
-import { Option, Some } from "ts-results";
-
-import { deleteContact } from "../api/contacts-apis";
-import { contactsState } from "../stores";
+import * as React from 'react';
+import Button from '@mui/material/Button';
+import DeleteIcon from '@mui/icons-material/Delete';
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Divider from '@mui/material/Divider';
+import Stack from '@mui/material/Stack';
+import { contactsState, tokenState, userState } from '../stores';
+import { deleteContact } from '../api/contacts-apis';
+import { Option, Some } from 'ts-results';
+import { TextField } from '@mui/material';
+import { useRecoilState } from 'recoil';
+import { useState } from 'react';
 
 type DeleteContactProps = {
   id: Option<string>;
@@ -37,6 +36,8 @@ function DeleteContactFormDialog({
     email: email,
     tel: tel,
   });
+  const [user, setUser] = useRecoilState(userState);
+  const [token, setToken] = useRecoilState(tokenState);
   const [contacts, setContacts] = useRecoilState(contactsState);
   const [open, setOpen] = React.useState(false);
 
@@ -48,12 +49,17 @@ function DeleteContactFormDialog({
     setOpen(false);
   };
 
-  function handleDeleteContact(e: any) {
+  async function handleDeleteContact(e: any) {
     e.preventDefault();
-    deleteContact(contactToDelete);
-    setContacts((contacts) =>
-      contacts.filter((contact) => contact.id !== contactToDelete.id)
-    );
+    if (user.some && token.some) {
+      const res = await deleteContact(user.val, contactToDelete, token.val);
+      if (res.ok) {
+        setContacts((contacts) =>
+          contacts.filter((contact) => contact.id !== contactToDelete.id)
+        );
+      }
+    }
+
     handleClose();
   }
 

@@ -152,8 +152,50 @@ export function updateContact(contact: Contact): Result<Contact, Error> {
   return Ok(contact);
 }
 
-export function deleteContact(contact: Contact): Result<Contact, Error> {
-  return Ok(contact);
+export async function deleteContact(
+  user: User,
+  contact: Contact,
+  biscuit: Token
+): Promise<Result<Contact, Error>> {
+  let delete_response: Result<Contact, Error> = Err(Error.DeleteFailure);
+  try {
+    // Attempt to delete the contact by id on the backend
+    if (user.id.none || contact.id.none || biscuit.token.none) {
+      return Err(Error.DeleteFailure);
+    }
+    const user_id: string = user.id.val;
+    const contact_id: string = contact.id.val;
+    const token: string = biscuit.token.val;
+
+    const response = await fetch(
+      `http://localhost:8080/users/${user_id}/contacts/${contact_id}`,
+      {
+        method: "DELETE",
+        mode: "cors",
+        cache: "no-cache",
+        headers: {
+          Authorization: token,
+        },
+      }
+    );
+    if (response.status !== 200) {
+      return Err(Error.DeleteFailure);
+    }
+
+    const data = await response.json();
+    const deleted_contact: Contact = {
+      id: data.id ? Some(data.id) : None,
+      firstName: data.firstName ? Some(data.firstName) : None,
+      lastName: data.lastName ? Some(data.lastName) : None,
+      email: data.email ? Some(data.email) : None,
+      tel: data.tel ? Some(data.tel) : None,
+    };
+    delete_response = Ok(deleted_contact);
+  } catch (error) {
+    console.log(error);
+    delete_response = Err(Error.DeleteFailure);
+  }
+  return delete_response;
 }
 
 export async function refreshContacts(
@@ -163,7 +205,7 @@ export async function refreshContacts(
 ): Promise<Result<Contact[], Error>> {
   let response: Result<Contact[], Error> = Err(Error.RefreshFailure);
   try {
-    // First fetch all the contacts so that we can 
+    // First fetch all the contacts so that we can
     let fetched_contacts: Contact[] = [];
     const get_all_contacts_result = await getAllContacts(user_id, token);
     if (get_all_contacts_result.err) {
@@ -177,11 +219,10 @@ export async function refreshContacts(
     // that will be called elswhere at strategic points in the code.
     const res = update_contacts(contacts, fetched_contacts);
     if (res.err) {
-      return Err(Error.RefreshFailure)
+      return Err(Error.RefreshFailure);
     }
     let updated_contacts: Contact[] = res.unwrap();
-      response = Ok(updated_contacts)
-
+    response = Ok(updated_contacts);
   } catch (error) {
     console.log(error);
     response = Err(Error.RefreshFailure);
