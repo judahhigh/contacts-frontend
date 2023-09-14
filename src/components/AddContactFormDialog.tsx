@@ -1,19 +1,19 @@
 import * as React from "react";
-import { useState, ChangeEvent } from "react";
-import { TextField } from "@mui/material";
-import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
-import Divider from "@mui/material/Divider";
-
 import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
-import { useRecoilState } from "recoil";
-
+import DialogTitle from "@mui/material/DialogTitle";
+import Divider from "@mui/material/Divider";
 import initContact from "../entities";
-import { persistContact } from "../api/contacts-apis";
+import Stack from "@mui/material/Stack";
+import uuid from "react-uuid";
+import { ChangeEvent, useState } from "react";
 import { contactsState } from "../stores";
+import { createContact } from "../api/contacts-apis";
+import { Some } from "ts-results";
+import { TextField } from "@mui/material";
+import { useRecoilState } from "recoil";
 
 function AddContactFormDialog() {
   const [contactToAdd, setContact] = useState(initContact());
@@ -31,32 +31,39 @@ function AddContactFormDialog() {
   function handleContactChange(e: ChangeEvent<HTMLInputElement>) {
     console.log(e.target.value);
     let id: string = e.target.id;
+    if (contactToAdd.id.none) {
+      const contact_id: string = uuid();
+      setContact((contact) => ({
+        ...contact,
+        id: Some(contact_id),
+      }));
+    }
     if (id === "first-name") {
       setContact((contact) => ({
         ...contact,
-        firstName: e.target.value,
+        firstName: Some(e.target.value),
       }));
     } else if (id === "last-name") {
       setContact((contact) => ({
         ...contact,
-        lastName: e.target.value,
+        lastName: Some(e.target.value),
       }));
     } else if (id === "email") {
       setContact((contact) => ({
         ...contact,
-        email: e.target.value,
+        email: Some(e.target.value),
       }));
     } else if (id === "tel") {
       setContact((contact) => ({
         ...contact,
-        tel: e.target.value,
+        tel: Some(e.target.value),
       }));
     }
   }
 
   function handleAddContact(e: any) {
     e.preventDefault();
-    persistContact(contactToAdd);
+    createContact(contactToAdd);
     setContacts([...contacts, contactToAdd]);
     handleClose();
   }

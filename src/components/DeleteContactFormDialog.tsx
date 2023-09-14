@@ -10,16 +10,17 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useRecoilState } from "recoil";
+import { Option, Some } from "ts-results";
 
 import { deleteContact } from "../api/contacts-apis";
 import { contactsState } from "../stores";
 
 type DeleteContactProps = {
-  id?: string;
-  firstName?: string;
-  lastName?: string;
-  email?: string;
-  tel?: string;
+  id: Option<string>;
+  firstName: Option<string>;
+  lastName: Option<string>;
+  email: Option<string>;
+  tel: Option<string>;
 };
 
 function DeleteContactFormDialog({

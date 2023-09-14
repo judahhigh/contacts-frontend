@@ -10,15 +10,16 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import UpdateIcon from "@mui/icons-material/Update";
+import { Option, Some } from "ts-results";
 
 import { updateContact } from "../api/contacts-apis";
 
 type UpdateContactProps = {
-  id?: string;
-  firstName?: string;
-  lastName?: string;
-  email?: string;
-  tel?: string;
+  id: Option<string>;
+  firstName: Option<string>;
+  lastName: Option<string>;
+  email: Option<string>;
+  tel: Option<string>;
 };
 
 function UpdateContactFormDialog({
@@ -51,22 +52,22 @@ function UpdateContactFormDialog({
     if (id === "first-name") {
       setContact((contact) => ({
         ...contact,
-        firstName: e.target.value,
+        firstName: Some(e.target.value),
       }));
     } else if (id === "last-name") {
       setContact((contact) => ({
         ...contact,
-        lastName: e.target.value,
+        lastName: Some(e.target.value),
       }));
     } else if (id === "email") {
       setContact((contact) => ({
         ...contact,
-        email: e.target.value,
+        email: Some(e.target.value),
       }));
     } else if (id === "tel") {
       setContact((contact) => ({
         ...contact,
-        tel: e.target.value,
+        tel: Some(e.target.value),
       }));
     }
   }

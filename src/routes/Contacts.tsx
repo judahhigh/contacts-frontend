@@ -24,12 +24,15 @@ function Contacts() {
   console.log("Token: ", token);
   console.log("User: ", user);
 
-  function handleRefresh() {
-    const result: Result<Contact[], Error> = refreshContacts(contacts);
-    if (result.ok) {
-      const updated_contacts: Contact[] = result.unwrap();
-      setContacts(updated_contacts);
+  async function handleRefresh() {
+    if (user.some && token.some && user.val.id.some && token.val.token.some) {
+      const result: Result<Contact[], Error> = await refreshContacts(user.val.id.val, token.val.token.val ,contacts);
+      if (result.ok) {
+        const updated_contacts: Contact[] = result.unwrap();
+        setContacts(updated_contacts);
+      }
     }
+    // Do nothing otherwise because there's no need, we could do a toast or something.
   }
 
   return (

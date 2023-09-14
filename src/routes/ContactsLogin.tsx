@@ -11,7 +11,7 @@ import { Box, Container, TextField } from "@mui/material";
 import { ChangeEvent, useState } from "react";
 import { login } from "../api/contacts-apis";
 import { Some } from "ts-results";
-import { tokenState, userState } from "../stores";
+import { tokenState, userState, contactsState } from "../stores";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 
@@ -24,6 +24,7 @@ function ContactsLogin() {
 
   const [token, setToken] = useRecoilState(tokenState);
   const [user, setUser] = useRecoilState(userState);
+  const [contacts, setContacts] = useRecoilState(contactsState);
 
   function handleUsernameChange(e: ChangeEvent<HTMLInputElement>) {
     setUsername(e.target.value);
@@ -42,6 +43,7 @@ function ContactsLogin() {
       console.log(fetched_user);
       setToken(Some(fetched_token));
       setUser(Some(fetched_user));
+      setContacts(fetched_user.contacts);
       navigate("/contacts");
     } else {
       handleLoginFailure();

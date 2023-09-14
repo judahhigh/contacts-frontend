@@ -20,6 +20,9 @@ const localStorageEffect = key => ({setSelf, onSet}) => {
 export const contactsState = atom<Contact[]>({
   key: "contactsState",
   default: [],
+  effects: [
+    localStorageEffect('current_contacts'),
+  ]
 });
 
 export const tokenState = atom<Option<Token>>({
@@ -32,5 +35,8 @@ export const tokenState = atom<Option<Token>>({
 
 export const userState = atom<Option<User>>({
   key: "user",
-  default: None
+  default: None,
+  effects: [
+    localStorageEffect('current_user'),
+  ]
 })
