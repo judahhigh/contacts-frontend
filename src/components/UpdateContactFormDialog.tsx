@@ -1,18 +1,18 @@
-import * as React from "react";
-import { useState, ChangeEvent } from "react";
-import { TextField } from "@mui/material";
-import Stack from "@mui/material/Stack";
-import Button from "@mui/material/Button";
-import Divider from "@mui/material/Divider";
-
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import UpdateIcon from "@mui/icons-material/Update";
-import { Option, Some } from "ts-results";
-
-import { updateContact } from "../api/contacts-apis";
+import * as React from 'react';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Divider from '@mui/material/Divider';
+import Stack from '@mui/material/Stack';
+import UpdateIcon from '@mui/icons-material/Update';
+import { ChangeEvent, useState } from 'react';
+import { Option, Some } from 'ts-results';
+import { TextField } from '@mui/material';
+import { tokenState, userState } from '../stores';
+import { updateContact } from '../api/contacts-apis';
+import { useRecoilState, useResetRecoilState } from 'recoil';
 
 type UpdateContactProps = {
   id: Option<string>;
@@ -37,6 +37,8 @@ function UpdateContactFormDialog({
     tel: tel,
   });
   const [open, setOpen] = React.useState(false);
+  const [user, setUser] = useRecoilState(userState);
+  const [token, setToken] = useRecoilState(tokenState);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -72,9 +74,12 @@ function UpdateContactFormDialog({
     }
   }
 
-  function handleUpdateContact(e: any) {
+  async function handleUpdateContact(e: any) {
     e.preventDefault();
-    updateContact(contact);
+    if (user.some && token.some) {
+      const res = await updateContact(user.val, contact, token.val);
+      // Do a toast that the contact was updated successfully
+    }
     handleClose();
   }
 

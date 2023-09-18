@@ -21,7 +21,7 @@ export function update_contacts(
       return Err(`fetched contact does not have id, contacts update failed.`);
     }
     const res: Contact[] = og.filter((og_contact) => {
-      og_contact.id.some && og_contact.id === target_id;
+      og_contact.id.some && og_contact.id === target_id
     });
     res.length === 0 ? true : false;
   });

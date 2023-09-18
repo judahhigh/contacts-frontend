@@ -148,8 +148,25 @@ export function fetchContacts(): Result<Contact[], Error> {
   return Ok(contacts);
 }
 
-export function updateContact(contact: Contact): Result<Contact, Error> {
-  return Ok(contact);
+export async function updateContact(
+  user: User,
+  contact: Contact,
+  biscuit: Token
+): Promise<Result<Contact, Error>> {
+  let update_response: Result<Contact, Error> = Err(Error.UpdateFailure);
+  try {
+    // Attempt to delete the contact by id on the backend
+    if (user.id.none || contact.id.none || biscuit.token.none) {
+      return Err(Error.DeleteFailure);
+    }
+    const user_id: string = user.id.val;
+    const contact_id: string = contact.id.val;
+    const token: string = biscuit.token.val;
+  } catch (error) {
+    console.log(error);
+    update_response = Err(Error.UpdateFailure);
+  }
+  return update_response;
 }
 
 export async function deleteContact(
