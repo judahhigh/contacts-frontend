@@ -1,19 +1,19 @@
-import Button from '@mui/material/Button';
-import CloseIcon from '@mui/icons-material/Close';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import NavBar from '../components/NavBar';
-import React from 'react';
-import Snackbar from '@mui/material/Snackbar';
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
-import { Box, Container, TextField } from '@mui/material';
-import { ChangeEvent } from 'react';
-import { contactsState, tokenState, userState } from '../stores';
-import { login } from '../api/contacts-apis';
-import { Some } from 'ts-results';
-import { useNavigate } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
+import Button from "@mui/material/Button";
+import CloseIcon from "@mui/icons-material/Close";
+import Divider from "@mui/material/Divider";
+import IconButton from "@mui/material/IconButton";
+import NavBar from "../components/NavBar";
+import React from "react";
+import Snackbar from "@mui/material/Snackbar";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+import { Box, Container, TextField } from "@mui/material";
+import { ChangeEvent } from "react";
+import { contactsState, tokenState, userState } from "../stores";
+import { login } from "../api/contacts-apis";
+import { Some } from "ts-results";
+import { useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
 
 function ContactsLogin() {
   const [username, setUsername] = React.useState("");
@@ -39,8 +39,6 @@ function ContactsLogin() {
     const result = await login(username, password);
     if (result.ok) {
       const [fetched_user, fetched_token] = result.unwrap();
-      console.log(fetched_token);
-      console.log(fetched_user);
       setToken(Some(fetched_token));
       setUser(Some(fetched_user));
       setContacts(fetched_user.contacts);
