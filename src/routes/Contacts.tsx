@@ -19,9 +19,6 @@ function Contacts() {
   const [user] = useRecoilState(userState);
   const [token] = useRecoilState(tokenState);
 
-  console.log("Token: ", token);
-  console.log("User: ", user);
-
   async function handleRefresh() {
     if (user.some && token.some && user.val.id.some && token.val.token.some) {
       const result: Result<Contact[], Error> = await refreshContacts(
@@ -29,7 +26,6 @@ function Contacts() {
         token.val.token.val
       );
       if (result.ok) {
-        console.log("HERE");
         const updated_contacts: Contact[] = result.unwrap();
         setContacts(updated_contacts);
       }

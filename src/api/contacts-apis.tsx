@@ -24,7 +24,6 @@ export async function login(
   password: string
 ): Promise<Result<[User, Token], Error>> {
   let login_response: Result<[User, Token], Error> = Err(Error.LoginFailure);
-  console.log(process.env);
   try {
     const user = { username: username, password: password };
     const response = await fetch(
@@ -63,7 +62,6 @@ export async function login(
       return Err(Error.LoginFailure);
     }
     const fetched_contacts = result.unwrap();
-    console.log("Fetched contacts", fetched_contacts);
     response_user.contacts = fetched_contacts;
 
     login_response = Ok([response_user, response_token]);
@@ -241,7 +239,6 @@ export async function updateContact(
     ) {
       return Err(Error.UpdateFailure);
     }
-    console.log("IN FETCH USER: ", user);
     const user_id: string = user.id.val;
     const contact_id: string = contact.id.val;
     const firstName: string = contact.firstName.val;
@@ -249,7 +246,6 @@ export async function updateContact(
     const email: string = contact.email.val;
     const tel: string = contact.tel.val;
     const token: string = biscuit.token.val;
-    console.log(user_id, contact_id, firstName, lastName, email, tel);
 
     // Attempt to retrieve the current requested contact from the db
     const body = {
@@ -284,7 +280,6 @@ export async function updateContact(
       tel: Some(data.tel),
     };
     update_response = Ok(response_contact);
-    console.log(data);
   } catch (error) {
     console.log(error);
     update_response = Err(Error.UpdateFailure);
@@ -387,7 +382,6 @@ export async function getAllContacts(
 
     // @ts-ignore
     data.forEach((element) => {
-      console.log(element);
       const contact: Contact = {
         id: Some(element.id),
         firstName: Some(element.firstName),

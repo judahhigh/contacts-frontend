@@ -9,15 +9,6 @@ import { useRecoilState } from "recoil";
 function ContactCards() {
   const [contacts] = useRecoilState(contactsState);
 
-  console.log("CONTACT CARD PAGE:", contacts);
-  console.log("TYPE INFO ON CONTACTS");
-  contacts.forEach((val) => {
-    console.log(typeof val);
-    console.log(val);
-    console.log(typeof val.firstName);
-    console.log(val.firstName);
-  });
-
   if (contacts && contacts.length > 0) {
     return (
       <Box sx={{ maxHeight: "100%", overflow: "auto" }}>

@@ -1,19 +1,19 @@
-import * as React from 'react';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import Divider from '@mui/material/Divider';
-import Stack from '@mui/material/Stack';
-import UpdateIcon from '@mui/icons-material/Update';
-import { ChangeEvent, useState } from 'react';
-import { Contact } from '../entities';
-import { contactsState, tokenState, userState } from '../stores';
-import { Option, Some } from 'ts-results';
-import { refreshContacts, updateContact } from '../api/contacts-apis';
-import { TextField } from '@mui/material';
-import { useRecoilState } from 'recoil';
+import * as React from "react";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import Divider from "@mui/material/Divider";
+import Stack from "@mui/material/Stack";
+import UpdateIcon from "@mui/icons-material/Update";
+import { ChangeEvent, useState } from "react";
+import { Contact } from "../entities";
+import { contactsState, tokenState, userState } from "../stores";
+import { Option, Some } from "ts-results";
+import { refreshContacts, updateContact } from "../api/contacts-apis";
+import { TextField } from "@mui/material";
+import { useRecoilState } from "recoil";
 
 type UpdateContactProps = {
   id: Option<string>;
@@ -51,7 +51,6 @@ function UpdateContactFormDialog({
   };
 
   function handleContactChange(e: ChangeEvent<HTMLInputElement>) {
-    console.log(e.target.value);
     let id: string = e.target.id;
     if (id === "first-name") {
       setContact((contact) => ({
@@ -79,7 +78,6 @@ function UpdateContactFormDialog({
   async function handleUpdateContact(e: any) {
     e.preventDefault();
     if (user.some && user.val.id.some && token.some && token.val.token.some) {
-      console.log("USER: ", user);
       const res = await updateContact(user.val, contact, token.val);
       if (res.ok) {
         const res = await refreshContacts(user.val.id.val, token.val.token.val);
