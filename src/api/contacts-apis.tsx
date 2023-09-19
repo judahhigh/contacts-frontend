@@ -1,6 +1,5 @@
 import { Contact, Token, User } from "../entities";
 import { Err, None, Ok, Result, Some } from "ts-results";
-import { update_contacts } from "./utils";
 
 export enum Error {
   PersistFailure,
@@ -11,6 +10,7 @@ export enum Error {
   LoginFailure,
   RegisterFailure,
   GetAllContactsFailure,
+  CreateFailure,
 }
 
 export async function login(
@@ -33,23 +33,27 @@ export async function login(
     }
     const data = await response.json();
     let response_user: User = {
-      id: data.user.id,
-      username: data.user.username,
-      email: data.user.email,
+      id: Some(data.user.id),
+      username: Some(data.user.username),
+      email: Some(data.user.email),
       password: None,
       contacts: [],
     };
-    let response_token: Token = { token: data.token };
+    let response_token: Token = { token: Some(data.token) };
 
     // fetch all contacts for a given user and fill it in here.
+    if (response_user.id.none || response_token.token.none) {
+      return Err(Error.LoginFailure);
+    }
     let result = await getAllContacts(
-      response_user.id.toString(),
-      response_token.token.toString()
+      response_user.id.val.toString(),
+      response_token.token.val.toString()
     );
     if (result.err) {
       return Err(Error.LoginFailure);
     }
     const fetched_contacts = result.unwrap();
+    console.log("Fetched contacts", fetched_contacts);
     response_user.contacts = fetched_contacts;
 
     login_response = Ok([response_user, response_token]);
@@ -79,27 +83,30 @@ export async function register(
       body: JSON.stringify(user),
     });
     if (response.status !== 200) {
-      return Err(Error.LoginFailure);
+      return Err(Error.RegisterFailure);
     }
     const data = await response.json();
     let response_user: User = {
-      id: data.user.id,
-      username: data.user.username,
-      email: data.user.email,
+      id: Some(data.user.id),
+      username: Some(data.user.username),
+      email: Some(data.user.email),
       password: None,
       contacts: [],
     };
     let response_token: Token = {
-      token: data.token,
+      token: Some(data.token),
     };
 
     // fetch all contacts for a given user and fill it in here.
+    if (response_user.id.none || response_token.token.none) {
+      return Err(Error.RegisterFailure)
+    }
     let result = await getAllContacts(
-      response_user.id.toString(),
-      response_token.token.toString()
+      response_user.id.val,
+      response_token.token.val
     );
     if (result.err) {
-      return Err(Error.LoginFailure);
+      return Err(Error.RegisterFailure);
     }
     const fetched_contacts = result.unwrap();
     response_user.contacts = fetched_contacts;
@@ -107,18 +114,73 @@ export async function register(
     register_response = Ok([response_user, response_token]);
   } catch (error) {
     console.log(error);
-    register_response = Err(Error.LoginFailure);
+    register_response = Err(Error.RegisterFailure);
   }
   return register_response;
 }
 
-export function createContact(contact: Contact): Result<Contact, Error> {
-  // TODO: Implement processing and persistence of contact through api call to backend
-  // The backend will
-  // 1. check if the contact already exists based on supplied information
-  // 2. if the contact is unique, it will attempt to persist it, otherwise it will fail
-  console.log(contact);
-  return Ok(contact);
+export async function createContact(
+  contact: Contact,
+  user: User,
+  biscuit: Token
+): Promise<Result<Contact, Error>> {
+  let create_response: Result<Contact, Error> = Err(Error.CreateFailure);
+  try {
+    if (
+      user.id.none ||
+      biscuit.token.none ||
+      contact.id.none ||
+      contact.firstName.none ||
+      contact.lastName.none ||
+      contact.email.none ||
+      contact.tel.none
+    ) {
+      return Err(Error.CreateFailure);
+    }
+    const user_id: string = user.id.val;
+    const token: string = biscuit.token.val;
+    const firstName: string = contact.firstName.val;
+    const lastName: string = contact.lastName.val;
+    const email: string = contact.email.val;
+    const tel: string = contact.tel.val;
+
+    // Attempt to retrieve the current requested contact from the db
+    const body = {
+      first_name: firstName,
+      last_name: lastName,
+      email: email,
+      tel: tel,
+    };
+    const response = await fetch(
+      `http://localhost:8080/users/${user_id}/contacts`,
+      {
+        method: "POST",
+        mode: "cors",
+        cache: "no-cache",
+        headers: {
+          Authorization: token,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      }
+    );
+    if (response.status !== 200) {
+      return Err(Error.CreateFailure);
+    }
+    const data = await response.json();
+    const response_contact: Contact = {
+      id: Some(data.id),
+      firstName: Some(data.first_name),
+      lastName: Some(data.last_name),
+      email: Some(data.email),
+      tel: Some(data.tel),
+    };
+    create_response = Ok(response_contact);
+  } catch (error) {
+    console.log(error);
+    create_response = Err(Error.CreateFailure);
+  }
+  return create_response;
 }
 
 export function fetchContacts(): Result<Contact[], Error> {
@@ -155,13 +217,61 @@ export async function updateContact(
 ): Promise<Result<Contact, Error>> {
   let update_response: Result<Contact, Error> = Err(Error.UpdateFailure);
   try {
-    // Attempt to delete the contact by id on the backend
-    if (user.id.none || contact.id.none || biscuit.token.none) {
-      return Err(Error.DeleteFailure);
+    if (
+      user.id.none ||
+      contact.id.none ||
+      contact.firstName.none ||
+      contact.lastName.none ||
+      contact.email.none ||
+      contact.tel.none ||
+      biscuit.token.none
+    ) {
+      return Err(Error.UpdateFailure);
     }
+    console.log("IN FETCH USER: ", user);
     const user_id: string = user.id.val;
     const contact_id: string = contact.id.val;
+    const firstName: string = contact.firstName.val;
+    const lastName: string = contact.lastName.val;
+    const email: string = contact.email.val;
+    const tel: string = contact.tel.val;
     const token: string = biscuit.token.val;
+    console.log(user_id, contact_id, firstName, lastName, email, tel);
+
+    // Attempt to retrieve the current requested contact from the db
+    const body = {
+      id: contact_id,
+      first_name: firstName,
+      last_name: lastName,
+      email: email,
+      tel: tel,
+    };
+    const response = await fetch(
+      `http://localhost:8080/users/${user_id}/contacts`,
+      {
+        method: "PUT",
+        mode: "cors",
+        cache: "no-cache",
+        headers: {
+          Authorization: token,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      }
+    );
+    if (response.status !== 200) {
+      return Err(Error.DeleteFailure);
+    }
+    const data = await response.json();
+    const response_contact: Contact = {
+      id: Some(data.id),
+      firstName: Some(data.first_name),
+      lastName: Some(data.last_name),
+      email: Some(data.email),
+      tel: Some(data.tel),
+    };
+    update_response = Ok(response_contact);
+    console.log(data);
   } catch (error) {
     console.log(error);
     update_response = Err(Error.UpdateFailure);
@@ -218,7 +328,6 @@ export async function deleteContact(
 export async function refreshContacts(
   user_id: string,
   token: string,
-  contacts: Contact[]
 ): Promise<Result<Contact[], Error>> {
   let response: Result<Contact[], Error> = Err(Error.RefreshFailure);
   try {
@@ -230,16 +339,7 @@ export async function refreshContacts(
     }
     fetched_contacts = get_all_contacts_result.unwrap();
 
-    // Next let's do a comparison with existing contacts by id,
-    // only appending the list where it's needed. We do not do
-    // a synchronize here, this is exposed as another function
-    // that will be called elswhere at strategic points in the code.
-    const res = update_contacts(contacts, fetched_contacts);
-    if (res.err) {
-      return Err(Error.RefreshFailure);
-    }
-    let updated_contacts: Contact[] = res.unwrap();
-    response = Ok(updated_contacts);
+    response = Ok(fetched_contacts);
   } catch (error) {
     console.log(error);
     response = Err(Error.RefreshFailure);

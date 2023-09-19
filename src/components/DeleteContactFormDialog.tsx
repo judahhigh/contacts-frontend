@@ -7,9 +7,11 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
+import { Contact } from '../entities';
 import { contactsState, tokenState, userState } from '../stores';
 import { deleteContact } from '../api/contacts-apis';
-import { Option, Some } from 'ts-results';
+import { Option } from 'ts-results';
+import { refreshContacts } from '../api/contacts-apis';
 import { TextField } from '@mui/material';
 import { useRecoilState } from 'recoil';
 import { useState } from 'react';
@@ -36,9 +38,9 @@ function DeleteContactFormDialog({
     email: email,
     tel: tel,
   });
-  const [user, setUser] = useRecoilState(userState);
-  const [token, setToken] = useRecoilState(tokenState);
-  const [contacts, setContacts] = useRecoilState(contactsState);
+  const [user] = useRecoilState(userState);
+  const [token] = useRecoilState(tokenState);
+  const [_contacts, setContacts] = useRecoilState(contactsState);
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -53,10 +55,15 @@ function DeleteContactFormDialog({
     e.preventDefault();
     if (user.some && token.some) {
       const res = await deleteContact(user.val, contactToDelete, token.val);
-      if (res.ok) {
-        setContacts((contacts) =>
-          contacts.filter((contact) => contact.id !== contactToDelete.id)
+      if (res.ok && user.val.id.some && token.val.token.some) {
+        const res = await refreshContacts(
+          user.val.id.val,
+          token.val.token.val,
         );
+        if (res.ok) {
+          const new_contacts: Contact[] = res.unwrap();
+          setContacts(new_contacts);
+        }
       }
     }
 
@@ -95,7 +102,7 @@ function DeleteContactFormDialog({
                   variant="standard"
                   label="First name"
                   size="small"
-                  value={firstName ? firstName : ""}
+                  value={firstName.some ? firstName.val : ""}
                 />
                 <TextField
                   disabled
@@ -106,7 +113,7 @@ function DeleteContactFormDialog({
                   variant="standard"
                   label="Last name"
                   size="small"
-                  value={lastName ? lastName : ""}
+                  value={lastName.some ? lastName.val : ""}
                 />
               </Stack>
               <Stack
@@ -123,7 +130,7 @@ function DeleteContactFormDialog({
                   variant="standard"
                   label="Email"
                   size="small"
-                  value={email ? email : ""}
+                  value={email.some ? email.val : ""}
                 />
                 <TextField
                   disabled
@@ -134,7 +141,7 @@ function DeleteContactFormDialog({
                   variant="standard"
                   label="Phone number"
                   size="small"
-                  value={tel ? tel : ""}
+                  value={tel.some ? tel.val : ""}
                 />
               </Stack>
               <Stack

@@ -1,14 +1,15 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import "./index.css";
-import reportWebVitals from "./reportWebVitals";
-
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Home from "./routes/Home";
 import Contacts from "./routes/Contacts";
 import ContactsLogin from "./routes/ContactsLogin";
 import ContactsSignUp from "./routes/ContactsSignUp";
+import Home from "./routes/Home";
+import React from "react";
+import ReactDOM from "react-dom/client";
+import reportWebVitals from "./reportWebVitals";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { RecoilRoot } from "recoil";
+import "./index.css";
+
+console.log(process.env)
 
 const router = createBrowserRouter([
   {

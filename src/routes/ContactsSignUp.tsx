@@ -1,16 +1,15 @@
 import Button from "@mui/material/Button";
 import CloseIcon from "@mui/icons-material/Close";
-import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import NavBar from "../components/NavBar";
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent } from "react";
 import Snackbar from "@mui/material/Snackbar";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { Box, Container, TextField } from "@mui/material";
+import { contactsState, tokenState, userState } from "../stores";
 import { register } from "../api/contacts-apis";
 import { Some } from "ts-results";
-import { tokenState, userState } from "../stores";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 
@@ -21,8 +20,9 @@ function ContactsSignUp() {
   const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
 
-  const [token, setToken] = useRecoilState(tokenState);
-  const [user, setUser] = useRecoilState(userState);
+  const [_token, setToken] = useRecoilState(tokenState);
+  const [_user, setUser] = useRecoilState(userState);
+  const [_contacts, setContacts] = useRecoilState(contactsState);
 
   function handleUsernameChange(e: ChangeEvent<HTMLInputElement>) {
     setUsername(e.target.value);
@@ -36,7 +36,7 @@ function ContactsSignUp() {
     setEmail(e.target.value);
   }
 
-  async function handleLogin(e: any) {
+  async function handleSignUp(e: any) {
     e.preventDefault();
     const result = await register(username, email, password);
     if (result.ok) {
@@ -45,13 +45,10 @@ function ContactsSignUp() {
       console.log(fetched_user);
       setToken(Some(fetched_token));
       setUser(Some(fetched_user));
+      setContacts(fetched_user.contacts);
       navigate("/contacts");
     }
   }
-
-  const handleLoginFailure = () => {
-    setOpen(true);
-  };
 
   const handleClose = (
     event: React.SyntheticEvent | Event,
@@ -103,7 +100,7 @@ function ContactsSignUp() {
             <Typography variant="h4" gutterBottom sx={{ textAlign: "center" }}>
               Sign up to begin managing your contacts.
             </Typography>
-            <form onSubmit={handleLogin}>
+            <form onSubmit={handleSignUp}>
               <Stack spacing={3}>
                 <TextField
                   id="username"

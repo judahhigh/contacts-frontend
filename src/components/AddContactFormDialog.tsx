@@ -1,24 +1,27 @@
-import * as React from "react";
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import Divider from "@mui/material/Divider";
-import initContact from "../entities";
-import Stack from "@mui/material/Stack";
-import uuid from "react-uuid";
-import { ChangeEvent, useState } from "react";
-import { contactsState } from "../stores";
-import { createContact } from "../api/contacts-apis";
-import { Some } from "ts-results";
-import { TextField } from "@mui/material";
-import { useRecoilState } from "recoil";
+import * as React from 'react';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Divider from '@mui/material/Divider';
+import initContact from '../entities';
+import Stack from '@mui/material/Stack';
+import uuid from 'react-uuid';
+import { ChangeEvent, useState } from 'react';
+import { Contact } from '../entities';
+import { contactsState, tokenState, userState } from '../stores';
+import { createContact, refreshContacts } from '../api/contacts-apis';
+import { Some } from 'ts-results';
+import { TextField } from '@mui/material';
+import { useRecoilState } from 'recoil';
 
 function AddContactFormDialog() {
   const [contactToAdd, setContact] = useState(initContact());
   const [open, setOpen] = React.useState(false);
-  const [contacts, setContacts] = useRecoilState(contactsState);
+  const [_contacts, setContacts] = useRecoilState(contactsState);
+  const [user] = useRecoilState(userState);
+  const [token] = useRecoilState(tokenState);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -61,10 +64,25 @@ function AddContactFormDialog() {
     }
   }
 
-  function handleAddContact(e: any) {
+  async function handleAddContact(e: any) {
     e.preventDefault();
-    createContact(contactToAdd);
-    setContacts([...contacts, contactToAdd]);
+    console.log("ASDFSADFASDF");
+    console.log(user)
+    console.log(token)
+    if (user.some && user.val.id.some && token.some && token.val.token.some) {
+      const res = await createContact(contactToAdd, user.val, token.val);
+      if (res.ok) {
+        const res = await refreshContacts(
+          user.val.id.val,
+          token.val.token.val,
+        );
+        if (res.ok) {
+          const new_contacts: Contact[] = res.unwrap();
+          setContacts(new_contacts);
+        }
+      }
+      // Do a toast that the contact was updated successfully
+    }
     handleClose();
   }
 

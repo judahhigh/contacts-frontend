@@ -1,33 +1,35 @@
 import * as React from "react";
-import CssBaseline from "@mui/material/CssBaseline";
-import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
-import Stack from "@mui/material/Stack";
-import Button from "@mui/material/Button";
-import { useRecoilState } from "recoil";
-import { Ok, Err, Result } from "ts-results";
-
-import NavBar from "../components/NavBar";
 import AddContactFormDialog from "../components/AddContactFormDialog";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import ContactCards from "../components/ContactCards";
+import Container from "@mui/material/Container";
+import NavBar from "../components/NavBar";
 import RefreshIcon from "@mui/icons-material/Refresh";
-import { contactsState, userState, tokenState } from "../stores";
-import { Error } from "../api/contacts-apis";
+import Stack from "@mui/material/Stack";
 import { Contact } from "../entities";
+import { contactsState, tokenState, userState } from "../stores";
+import { Error } from "../api/contacts-apis";
 import { refreshContacts } from "../api/contacts-apis";
+import { Result } from "ts-results";
+import { useRecoilState } from "recoil";
 
 function Contacts() {
-  const [contacts, setContacts] = useRecoilState(contactsState);
-  const [user, setUser] = useRecoilState(userState);
-  const [token, setToken] = useRecoilState(tokenState);
+  const [_contacts, setContacts] = useRecoilState(contactsState);
+  const [user] = useRecoilState(userState);
+  const [token] = useRecoilState(tokenState);
 
   console.log("Token: ", token);
   console.log("User: ", user);
 
   async function handleRefresh() {
     if (user.some && token.some && user.val.id.some && token.val.token.some) {
-      const result: Result<Contact[], Error> = await refreshContacts(user.val.id.val, token.val.token.val ,contacts);
+      const result: Result<Contact[], Error> = await refreshContacts(
+        user.val.id.val,
+        token.val.token.val
+      );
       if (result.ok) {
+        console.log("HERE");
         const updated_contacts: Contact[] = result.unwrap();
         setContacts(updated_contacts);
       }

@@ -1,19 +1,19 @@
-import Button from "@mui/material/Button";
-import CloseIcon from "@mui/icons-material/Close";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
-import NavBar from "../components/NavBar";
-import React from "react";
-import Snackbar from "@mui/material/Snackbar";
-import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
-import { Box, Container, TextField } from "@mui/material";
-import { ChangeEvent, useState } from "react";
-import { login } from "../api/contacts-apis";
-import { Some } from "ts-results";
-import { tokenState, userState, contactsState } from "../stores";
-import { useNavigate } from "react-router-dom";
-import { useRecoilState } from "recoil";
+import Button from '@mui/material/Button';
+import CloseIcon from '@mui/icons-material/Close';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
+import NavBar from '../components/NavBar';
+import React from 'react';
+import Snackbar from '@mui/material/Snackbar';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
+import { Box, Container, TextField } from '@mui/material';
+import { ChangeEvent } from 'react';
+import { contactsState, tokenState, userState } from '../stores';
+import { login } from '../api/contacts-apis';
+import { Some } from 'ts-results';
+import { useNavigate } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
 
 function ContactsLogin() {
   const [username, setUsername] = React.useState("");
@@ -22,9 +22,9 @@ function ContactsLogin() {
   const navigate = useNavigate();
   const handleClick = () => navigate("/signup");
 
-  const [token, setToken] = useRecoilState(tokenState);
-  const [user, setUser] = useRecoilState(userState);
-  const [contacts, setContacts] = useRecoilState(contactsState);
+  const [_token, setToken] = useRecoilState(tokenState);
+  const [_user, setUser] = useRecoilState(userState);
+  const [_contacts, setContacts] = useRecoilState(contactsState);
 
   function handleUsernameChange(e: ChangeEvent<HTMLInputElement>) {
     setUsername(e.target.value);

@@ -1,18 +1,19 @@
-import * as React from 'react';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import Divider from '@mui/material/Divider';
-import Stack from '@mui/material/Stack';
-import UpdateIcon from '@mui/icons-material/Update';
-import { ChangeEvent, useState } from 'react';
-import { Option, Some } from 'ts-results';
-import { TextField } from '@mui/material';
-import { tokenState, userState } from '../stores';
-import { updateContact } from '../api/contacts-apis';
-import { useRecoilState, useResetRecoilState } from 'recoil';
+import * as React from "react";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import Divider from "@mui/material/Divider";
+import Stack from "@mui/material/Stack";
+import UpdateIcon from "@mui/icons-material/Update";
+import { ChangeEvent, useState } from "react";
+import { Contact } from "../entities";
+import { contactsState, tokenState, userState } from "../stores";
+import { Option, Some } from "ts-results";
+import { refreshContacts, updateContact } from "../api/contacts-apis";
+import { TextField } from "@mui/material";
+import { useRecoilState } from "recoil";
 
 type UpdateContactProps = {
   id: Option<string>;
@@ -37,8 +38,9 @@ function UpdateContactFormDialog({
     tel: tel,
   });
   const [open, setOpen] = React.useState(false);
-  const [user, setUser] = useRecoilState(userState);
-  const [token, setToken] = useRecoilState(tokenState);
+  const [user] = useRecoilState(userState);
+  const [token] = useRecoilState(tokenState);
+  const [_contacts, setContacts] = useRecoilState(contactsState);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -76,8 +78,16 @@ function UpdateContactFormDialog({
 
   async function handleUpdateContact(e: any) {
     e.preventDefault();
-    if (user.some && token.some) {
+    if (user.some && user.val.id.some && token.some && token.val.token.some) {
+      console.log("USER: ", user);
       const res = await updateContact(user.val, contact, token.val);
+      if (res.ok) {
+        const res = await refreshContacts(user.val.id.val, token.val.token.val);
+        if (res.ok) {
+          const new_contacts: Contact[] = res.unwrap();
+          setContacts(new_contacts);
+        }
+      }
       // Do a toast that the contact was updated successfully
     }
     handleClose();
@@ -114,7 +124,7 @@ function UpdateContactFormDialog({
                   variant="standard"
                   label="First name"
                   size="small"
-                  value={firstName ? firstName : ""}
+                  defaultValue={firstName.some ? firstName.val : ""}
                   onChange={handleContactChange}
                 />
                 <TextField
@@ -125,7 +135,7 @@ function UpdateContactFormDialog({
                   variant="standard"
                   label="Last name"
                   size="small"
-                  value={lastName ? lastName : ""}
+                  defaultValue={lastName.some ? lastName.val : ""}
                   onChange={handleContactChange}
                 />
               </Stack>
@@ -142,18 +152,18 @@ function UpdateContactFormDialog({
                   variant="standard"
                   label="Email"
                   size="small"
-                  value={email ? email : ""}
+                  defaultValue={email.some ? email.val : ""}
                   onChange={handleContactChange}
                 />
                 <TextField
                   id="tel"
-                  type="text"
+                  type="tel"
                   margin="normal"
                   fullWidth
                   variant="standard"
                   label="Phone number"
                   size="small"
-                  value={tel ? tel : ""}
+                  defaultValue={tel.some ? tel.val : ""}
                   onChange={handleContactChange}
                 />
               </Stack>
