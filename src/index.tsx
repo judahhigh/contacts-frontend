@@ -9,7 +9,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { RecoilRoot } from "recoil";
 import "./index.css";
 
-console.log(process.env)
+console.log(process.env);
 
 const router = createBrowserRouter([
   {

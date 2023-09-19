@@ -1,19 +1,19 @@
-import * as React from "react";
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import Divider from "@mui/material/Divider";
-import Stack from "@mui/material/Stack";
-import UpdateIcon from "@mui/icons-material/Update";
-import { ChangeEvent, useState } from "react";
-import { Contact } from "../entities";
-import { contactsState, tokenState, userState } from "../stores";
-import { Option, Some } from "ts-results";
-import { refreshContacts, updateContact } from "../api/contacts-apis";
-import { TextField } from "@mui/material";
-import { useRecoilState } from "recoil";
+import * as React from 'react';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Divider from '@mui/material/Divider';
+import Stack from '@mui/material/Stack';
+import UpdateIcon from '@mui/icons-material/Update';
+import { ChangeEvent, useState } from 'react';
+import { Contact } from '../entities';
+import { contactsState, tokenState, userState } from '../stores';
+import { Option, Some } from 'ts-results';
+import { refreshContacts, updateContact } from '../api/contacts-apis';
+import { TextField } from '@mui/material';
+import { useRecoilState } from 'recoil';
 
 type UpdateContactProps = {
   id: Option<string>;

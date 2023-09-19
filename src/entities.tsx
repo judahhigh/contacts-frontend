@@ -1,4 +1,4 @@
-import { Option, None } from "ts-results";
+import { None, Option } from 'ts-results';
 
 export type Contact = {
   id: Option<string>;
@@ -9,16 +9,16 @@ export type Contact = {
 };
 
 export type User = {
-  id: Option<string>,
+  id: Option<string>;
   username: Option<string>;
   email: Option<string>;
-  password: Option<string>,
-  contacts: Contact[]
-}
+  password: Option<string>;
+  contacts: Contact[];
+};
 
 export type Token = {
-  token: Option<string>,
-}
+  token: Option<string>;
+};
 
 export default function initContact(): Contact {
   return {
@@ -26,6 +26,6 @@ export default function initContact(): Contact {
     firstName: None,
     lastName: None,
     email: None,
-    tel: None
+    tel: None,
   };
 }

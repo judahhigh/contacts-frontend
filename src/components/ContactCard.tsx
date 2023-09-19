@@ -1,9 +1,9 @@
-import DeleteContactFormDialog from "./DeleteContactFormDialog";
-import Paper from "@mui/material/Paper";
-import Stack from "@mui/material/Stack";
-import UpdateContactFormDialog from "./UpdateContactFormDialog";
-import { Option } from "ts-results";
-import { Typography } from "@mui/material";
+import DeleteContactFormDialog from './DeleteContactFormDialog';
+import Paper from '@mui/material/Paper';
+import Stack from '@mui/material/Stack';
+import UpdateContactFormDialog from './UpdateContactFormDialog';
+import { Option } from 'ts-results';
+import { Typography } from '@mui/material';
 
 type ContactCardProps = {
   id: Option<string>;

@@ -1,10 +1,10 @@
-import ContactCard from './ContactCard';
-import Stack from '@mui/material/Stack';
-import uuid from 'react-uuid';
-import { Box } from '@mui/material';
-import { Contact } from '../entities';
-import { contactsState } from '../stores';
-import { useRecoilState } from 'recoil';
+import ContactCard from "./ContactCard";
+import Stack from "@mui/material/Stack";
+import uuid from "react-uuid";
+import { Box } from "@mui/material";
+import { Contact } from "../entities";
+import { contactsState } from "../stores";
+import { useRecoilState } from "recoil";
 
 function ContactCards() {
   const [contacts] = useRecoilState(contactsState);

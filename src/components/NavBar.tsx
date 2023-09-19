@@ -6,10 +6,10 @@ import logo from "../logo.png";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { Link } from "react-router-dom";
-import { tokenState, userState } from "../stores";
-import { useRecoilState } from "recoil";
 import { None } from "ts-results";
+import { tokenState, userState } from "../stores";
 import { useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
 
 function NavBar() {
   const [token, setToken] = useRecoilState(tokenState);
@@ -19,7 +19,7 @@ function NavBar() {
   function handleLogout(): void {
     setToken(None);
     setUser(None);
-    navigate("/")
+    navigate("/");
   }
 
   return (

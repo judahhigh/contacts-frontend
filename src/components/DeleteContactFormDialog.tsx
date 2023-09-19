@@ -56,10 +56,7 @@ function DeleteContactFormDialog({
     if (user.some && token.some) {
       const res = await deleteContact(user.val, contactToDelete, token.val);
       if (res.ok && user.val.id.some && token.val.token.some) {
-        const res = await refreshContacts(
-          user.val.id.val,
-          token.val.token.val,
-        );
+        const res = await refreshContacts(user.val.id.val, token.val.token.val);
         if (res.ok) {
           const new_contacts: Contact[] = res.unwrap();
           setContacts(new_contacts);

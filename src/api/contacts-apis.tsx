@@ -1,5 +1,11 @@
-import { Contact, Token, User } from "../entities";
-import { Err, None, Ok, Result, Some } from "ts-results";
+import { Contact, Token, User } from '../entities';
+import {
+  Err,
+  None,
+  Ok,
+  Result,
+  Some
+  } from 'ts-results';
 
 export enum Error {
   PersistFailure,
@@ -18,16 +24,20 @@ export async function login(
   password: string
 ): Promise<Result<[User, Token], Error>> {
   let login_response: Result<[User, Token], Error> = Err(Error.LoginFailure);
+  console.log(process.env);
   try {
     const user = { username: username, password: password };
-    const response = await fetch("http://localhost:8080/login", {
-      method: "POST",
-      mode: "cors",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(user),
-    });
+    const response = await fetch(
+      `${process.env.REACT_APP_SCHEME}://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/login`,
+      {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(user),
+      }
+    );
     if (response.status !== 200) {
       return Err(Error.LoginFailure);
     }
@@ -74,14 +84,17 @@ export async function register(
   );
   try {
     const user = { username: username, password: password, email: email };
-    const response = await fetch("http://localhost:8080/register", {
-      method: "POST",
-      mode: "cors",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(user),
-    });
+    const response = await fetch(
+      `${process.env.REACT_APP_SCHEME}://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/register`,
+      {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(user),
+      }
+    );
     if (response.status !== 200) {
       return Err(Error.RegisterFailure);
     }
@@ -99,7 +112,7 @@ export async function register(
 
     // fetch all contacts for a given user and fill it in here.
     if (response_user.id.none || response_token.token.none) {
-      return Err(Error.RegisterFailure)
+      return Err(Error.RegisterFailure);
     }
     let result = await getAllContacts(
       response_user.id.val,
@@ -152,7 +165,7 @@ export async function createContact(
       tel: tel,
     };
     const response = await fetch(
-      `http://localhost:8080/users/${user_id}/contacts`,
+      `${process.env.REACT_APP_SCHEME}://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/users/${user_id}/contacts`,
       {
         method: "POST",
         mode: "cors",
@@ -247,7 +260,7 @@ export async function updateContact(
       tel: tel,
     };
     const response = await fetch(
-      `http://localhost:8080/users/${user_id}/contacts`,
+      `${process.env.REACT_APP_SCHEME}://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/users/${user_id}/contacts`,
       {
         method: "PUT",
         mode: "cors",
@@ -295,7 +308,7 @@ export async function deleteContact(
     const token: string = biscuit.token.val;
 
     const response = await fetch(
-      `http://localhost:8080/users/${user_id}/contacts/${contact_id}`,
+      `${process.env.REACT_APP_SCHEME}://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/users/${user_id}/contacts/${contact_id}`,
       {
         method: "DELETE",
         mode: "cors",
@@ -327,7 +340,7 @@ export async function deleteContact(
 
 export async function refreshContacts(
   user_id: string,
-  token: string,
+  token: string
 ): Promise<Result<Contact[], Error>> {
   let response: Result<Contact[], Error> = Err(Error.RefreshFailure);
   try {
@@ -357,7 +370,7 @@ export async function getAllContacts(
   try {
     let fetched_contacts: Contact[] = [];
     const response = await fetch(
-      `http://localhost:8080/users/${user_id}/contacts`,
+      `${process.env.REACT_APP_SCHEME}://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/users/${user_id}/contacts`,
       {
         method: "GET",
         mode: "cors",
@@ -380,7 +393,7 @@ export async function getAllContacts(
         firstName: Some(element.firstName),
         lastName: Some(element.lastName),
         email: Some(element.email),
-        tel: Some(element.email),
+        tel: Some(element.tel),
       };
       fetched_contacts = [...fetched_contacts, contact];
     });
