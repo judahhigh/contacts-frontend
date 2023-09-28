@@ -67,3 +67,11 @@ Start the frontend client.
 ```
 
 Since this frontend is configured to make requests against the backend, you must initialize and start the backend server locally to fully demo the Contacts web app project. Clone the backend repository, which is available at https://github.com/judahhigh/contacts-backend
+
+## Roadmap
+
+- Provide an Oauth2 flow for registering and logging into the app
+
+- Provide more powerful client-side information validation for things like phone numbers
+
+- Add a convenience mechanism for showing your password so you can check it visually
